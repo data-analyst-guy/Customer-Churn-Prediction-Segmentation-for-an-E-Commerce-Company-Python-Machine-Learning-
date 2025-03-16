@@ -418,13 +418,12 @@ def plot_diverging_bar_chart(df, categorical_cols, target):
 
 # Plot the charts
 plot_diverging_bar_chart(df, categorical_cols, 'Churn')
-
+```
 ![image](https://github.com/user-attachments/assets/885b4963-7361-44d4-bbe0-ca1ee88ab4b7)  
 ![image](https://github.com/user-attachments/assets/e551dbb8-a41e-4576-9408-0a887f139a31)  
 ![image](https://github.com/user-attachments/assets/42805c46-d446-4139-a408-ca54cf0d3856)  
 ![image](https://github.com/user-attachments/assets/19261fc2-d897-4c9c-9301-ae482d14c870)  
 ![image](https://github.com/user-attachments/assets/3c57f2c8-6b8a-4591-a9fe-54c21122d597)  
-
 
 
 ### 3️⃣ **SQL/Python Analysis & Machine Learning**
