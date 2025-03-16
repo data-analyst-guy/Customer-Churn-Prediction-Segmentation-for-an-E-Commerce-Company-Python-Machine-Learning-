@@ -206,22 +206,21 @@ plt.show()
 - **Xử lý dữ liệu trống**:
   - Thay thế **NaN** bằng trung bình (`mean`):  
     ```python
-    df['OrderAmountHikeFromlastYear'] = df['OrderAmountHikeFromlastYear'].fillna(df['OrderAmountHikeFromlastYear'].mean())
-    df['OrderCount'] = df['OrderCount'].fillna(df['OrderCount'].mean())
+    df['OrderAmountHikeFromlastYear'] = df['OrderAmountHikeFromlastYear'].fillna(df['OrderAmountHikeFromlastYear'].median())
+    df['OrderCount'] = df['OrderCount'].fillna(df['OrderCount'].median())
     ```
-      - Thay thế **NaN** bằng `0`:
-        ```python
-        df['CouponUsed'] = df['CouponUsed'].fillna(0)
-        df['DaySinceLastOrder'] = df['DaySinceLastOrder'].fillna(0)
-    ```
-### 🔍 Xử lý NaN cho `CouponUsed` và `DaySinceLastOrder`
-
-### 📌 Lý do chọn `0` thay vì mean/median:
+🔍 Xử lý NaN cho `CouponUsed` và `DaySinceLastOrder`
+📌 Lý do chọn `0` thay vì mean/median:
 ✅ **Dữ liệu có phân bố lệch (skewed distribution)** → Mean không phản ánh trung thực.  
 ✅ **Nhiều giá trị `0` trong dữ liệu** → NaN có khả năng đại diện cho **"không có hoạt động"** thay vì giá trị bị mất.  
 ✅ **Điền bằng `0` giúp giữ nguyên ý nghĩa thực tế của dữ liệu**:  
    - **`CouponUsed = 0`** → Khách hàng **chưa sử dụng** phiếu giảm giá.  
    - **`DaySinceLastOrder = 0`** → Khách hàng **chưa từng đặt hàng**.  
+  - Thay thế **NaN** bằng `0`:
+    ```python
+    df['CouponUsed'] = df['CouponUsed'].fillna(0)
+    df['DaySinceLastOrder'] = df['DaySinceLastOrder'].fillna(0)
+    ```
 ### 2️⃣ **Exploratory Data Analysis (EDA)**
 ## 📊 Phân tích phân bố Tenure theo nhóm Churn & Active
 
