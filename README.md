@@ -65,7 +65,7 @@ Dự án này nhằm phân tích hành vi khách hàng và dự đoán khả nă
 
 ### 1️⃣ **Data Cleaning & Preprocessing**
 - Kiểm tra dữ liệu thiếu 
-### 2️⃣ Missing Data Analysis
+### 2️⃣ Missing Data Analysis 
 
 Để kiểm tra dữ liệu bị thiếu, chúng tôi sử dụng hàm sau:
 
@@ -88,8 +88,118 @@ def count_NaN_values(df):
     NaN_table.rename(columns={
 ```
 - Chuyển đổi kiểu dữ liệu phù hợp.
-- Xử lý outliers nếu cần.
+Sau khi kiểm tra dữ liệu thiếu, chúng tôi tiến hành xử lý như sau:
 
+#### 📌 Xử lý cột `Tenure`
+- Vẽ biểu đồ phân bố **Tenure** theo trạng thái Churn:
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Lọc dữ liệu cho churn = 0 và churn = 1
+churn_0 = df[df['Churn'] == 0]
+churn_1 = df[df['Churn'] == 1]
+
+column_to_plot = 'Tenure'
+
+plt.figure(figsize=(10, 6))
+sns.histplot(churn_0[column_to_plot], color='green', label='Churn = 0', kde=True, bins=30)
+sns.histplot(churn_1[column_to_plot], color='red', label='Churn = 1', kde=True, bins=30)
+
+plt.title(f'Histogram of {column_to_plot} by Churn')
+plt.xlabel(column_to_plot)
+plt.ylabel('Frequency')
+plt.legend()
+plt.show()
+```
+
+- **Xử lý dữ liệu trống**: Thay thế các giá trị NaN bằng `0`:
+```python
+df['Tenure'] = df['Tenure'].fillna(0)
+```
+
+---
+
+#### 📌 Xử lý cột `WarehouseToHome`
+- Vẽ biểu đồ phân bố **WarehouseToHome** theo trạng thái Churn:
+
+```python
+column_to_plot = 'WarehouseToHome'
+
+plt.figure(figsize=(10, 6))
+sns.histplot(churn_0[column_to_plot], color='green', label='Churn = 0', kde=True)
+sns.histplot(churn_1[column_to_plot], color='red', label='Churn = 1', kde=True)
+
+plt.title(f'Histogram of {column_to_plot} by Churn')
+plt.xlabel(column_to_plot)
+plt.ylabel('Frequency')
+plt.legend()
+plt.show()
+```
+
+- **Xử lý dữ liệu trống**: Thay thế các giá trị NaN bằng giá trị trung bình:
+```python
+df['WarehouseToHome'] = df['WarehouseToHome'].fillna(df['WarehouseToHome'].mean())
+```
+
+---
+
+#### 📌 Xử lý cột `HourSpendOnApp`
+- Vẽ biểu đồ phân bố **HourSpendOnApp** theo trạng thái Churn:
+
+```python
+column_to_plot = 'HourSpendOnApp'
+
+plt.figure(figsize=(10, 6))
+sns.histplot(churn_0[column_to_plot], color='green', label='Churn = 0', kde=True, bins=30)
+sns.histplot(churn_1[column_to_plot], color='red', label='Churn = 1', kde=True, bins=30)
+
+plt.title(f'Histogram of {column_to_plot} by Churn')
+plt.xlabel(column_to_plot)
+plt.ylabel('Frequency')
+plt.legend()
+plt.show()
+```
+
+- **Xử lý dữ liệu trống**: Do giá trị trung bình là **2.93**, làm tròn thành `3`:
+```python
+df['HourSpendOnApp'] = df['HourSpendOnApp'].fillna(3)
+```
+
+---
+
+#### 📌 Xử lý các cột còn lại (`OrderAmountHikeFromlastYear`, `CouponUsed`, `OrderCount`, `DaySinceLastOrder`)
+- Vẽ biểu đồ phân bố:
+
+```python
+list_nan_col = ['OrderAmountHikeFromlastYear', 'CouponUsed', 'OrderCount', 'DaySinceLastOrder']
+
+g = sns.FacetGrid(pd.melt(df, id_vars='Churn', value_vars=list_nan_col), col="variable", col_wrap=2, height=4, sharex=False, sharey=False)
+g.map_dataframe(sns.histplot, x='value', hue='Churn', kde=True, stat='density', common_norm=False, palette='Set1')
+
+for ax, column in zip(g.axes.flat, list_nan_col):
+    ax.set_title(f'Histogram of {column} by Churn')
+    ax.set_xlabel(column)
+    ax.set_ylabel('Density')
+
+g.add_legend(title='Churn')
+
+plt.tight_layout()
+plt.show()
+```
+
+- **Xử lý dữ liệu trống**:
+  - Thay thế **NaN** bằng trung bình (`mean`):  
+    ```python
+    df['OrderAmountHikeFromlastYear'] = df['OrderAmountHikeFromlastYear'].fillna(df['OrderAmountHikeFromlastYear'].mean())
+    df['OrderCount'] = df['OrderCount'].fillna(df['OrderCount'].mean())
+    ```
+  - Thay thế **NaN** bằng `0`:
+    ```python
+    df['CouponUsed'] = df['CouponUsed'].fillna(0)
+    df['DaySinceLastOrder'] = df['DaySinceLastOrder'].fillna(0)
+    ```
 ### 2️⃣ **Exploratory Data Analysis (EDA)**
 - Phân tích phân bố dữ liệu theo nhóm churn & active.
 - Trực quan hóa dữ liệu bằng biểu đồ.
