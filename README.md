@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/2c08113b-2528-4382-aba0-3d9bc106e544)# 📊 Project: Customer Churn Prediction & Segmentation for an E-Commerce Company | Python, Machine Learning 
+# 📊 Project: Customer Churn Prediction & Segmentation for an E-Commerce Company | Python, Machine Learning 
 
 ## 📑 Table of Contents
 1. [Background & Overview](#background--overview)
