@@ -751,33 +751,50 @@ plt.show()
 ![image](https://github.com/user-attachments/assets/d0199511-46e9-4b59-a3f2-18e4c3bee0a8)
 Sau khi huấn luyện mô hình **Cat Boost**, chúng ta kiểm tra mức độ quan trọng của từng đặc trưng (feature) trong dự đoán.
 ![image](https://github.com/user-attachments/assets/e771fef6-4bef-4ce8-a031-19549f46f7a3)
-
-- **Đánh giá mô hình**:
+**Đánh giá mô hình**:
 - Catboost đạt độ chính xác cao nhất.
-## 🔎 Final Conclusion & Recommendations
+- Các đặc trưng quan trọng bao gồm:
 
-### 📌 Key Takeaways:
-✔️ Khách hàng có **điểm hài lòng thấp** và **ít đơn hàng** có khả năng churn cao.  
-✔️ **XGBoost đạt độ chính xác cao nhất** với **AUC = 0.89**.  
-✔️ **Tăng cường chương trình ưu đãi** và **CSKH tốt hơn** có thể giảm churn.  
+Tenure_transformed – Đặc trưng này có tầm quan trọng cao nhất, có thể liên quan đến số năm khách hàng đã gắn bó với dịch vụ.
+SatisfactionScore – Điểm đánh giá mức độ hài lòng của khách hàng.
+WarehouseToHome_transformed – Khoảng cách từ kho hàng đến nhà của khách hàng.
+NumberOfAddress – Số lượng địa chỉ được đăng ký bởi khách hàng.
+Complain – Số lượng khiếu nại của khách hàng, có thể ảnh hưởng đến quyết định rời bỏ dịch vụ.
+OrderAmountHikeFromLastYear – Sự gia tăng số lượng đơn hàng so với năm trước.
+CashbackAmount_transformed – Số tiền hoàn lại mà khách hàng nhận được.
+DaySinceLastOrder – Số ngày kể từ lần đặt hàng gần nhất.
 
-👉🏻 **Khuyến nghị:**
-1. Cải thiện chất lượng dịch vụ để tăng điểm hài lòng của khách hàng.
-2. Cung cấp ưu đãi đặc biệt cho khách hàng có nguy cơ churn cao.
-3. Theo dõi sát hành vi của khách hàng để đưa ra chiến lược cá nhân hóa hợp lý.
+## 🔎 Final Conclusion & Recommendations  
 
----
+✅ Tóm tắt kết quả mô hình:  
+✔️ CatBoost đạt độ chính xác cao nhất với AUC = 0.99, cho thấy mô hình rất mạnh mẽ trong việc phân loại.  
+✔️ Các đặc trưng quan trọng đều có ý nghĩa thực tế, liên quan đến trải nghiệm khách hàng, phương thức thanh toán, hành vi sử dụng dịch vụ.  
 
-## 🚀 Cách chạy dự án
+🚀 Khuyến nghị để cải thiện churn (Giảm tỷ lệ khách hàng rời bỏ)  
+Dựa trên phân tích đặc trưng quan trọng, có thể đề xuất các chiến lược cụ thể để cải thiện trải nghiệm khách hàng và giảm churn:  
 
-1. **Cài đặt các thư viện cần thiết**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. **Chạy notebook**:
-   - Mở file `churn_prediction.ipynb` và chạy từng cell để xem kết quả.
-
----
+1️⃣ Cải thiện trải nghiệm khách hàng (Customer Satisfaction)  
+🔹 Cá nhân hóa dịch vụ: Dựa vào dữ liệu SatisfactionScore, có thể gửi các ưu đãi hoặc chương trình chăm sóc khách hàng đặc biệt cho nhóm có điểm thấp.  
+🔹 Chủ động xử lý khiếu nại: KH có khiếu nại ("Complain") có nguy cơ rời bỏ cao hơn. Tạo đội ngũ hỗ trợ riêng, xử lý nhanh các phản hồi tiêu cực.  
+🔹 Tăng cường chính sách đổi trả & hỗ trợ sau mua để tạo niềm tin và giữ chân khách hàng lâu hơn.  
+2️⃣ Tối ưu logistics & giao hàng  
+🔹 Khoảng cách từ kho đến nhà ("WarehouseToHome_transformed") ảnh hưởng lớn → Tăng số lượng kho gần khu vực có nhiều khách hàng, tối ưu tuyến giao hàng.  
+🔹 Tối ưu thời gian giao hàng: Cam kết thời gian giao hàng rõ ràng hơn, đặc biệt với nhóm khách hàng ở xa.  
+3️⃣ Tăng cường loyalty program (Chương trình khách hàng thân thiết)  
+🔹 Nhóm khách hàng có thời gian sử dụng lâu dài ("Tenure_transformed") có giá trị cao → Tạo các ưu đãi dài hạn cho họ, ví dụ: giảm giá, tích điểm, gói thành viên VIP.  
+🔹 Tặng cashback (hoàn tiền) cho khách hàng cũ để giữ chân họ tiếp tục mua sắm.  
+4️⃣ Tối ưu phương thức thanh toán & kênh đăng nhập  
+🔹 Những khách hàng dùng E-wallet & Credit Card có hành vi khác biệt → Tích hợp nhiều hình thức thanh toán hơn, khuyến mãi khi dùng ví điện tử.  
+🔹 Nhóm khách hàng đăng nhập bằng Mobile/Desktop có hành vi khác nhau → Tối ưu UI/UX trên từng nền tảng để phù hợp hơn với nhóm KH đó.  
+5️⃣ Dự đoán & ngăn chặn churn bằng AI  
+🔹 Dùng mô hình dự đoán churn (như CatBoost đang triển khai) để nhận diện KH có nguy cơ rời bỏ sớm.  
+🔹 Gửi email/SMS nhắc nhở với ưu đãi phù hợp trước khi họ quyết định rời bỏ dịch vụ.  
+🎯 Tóm tắt khuyến nghị chính  
+✔ Cải thiện trải nghiệm khách hàng (CSKH tốt hơn, xử lý khiếu nại nhanh).  
+✔ Tối ưu logistics & giao hàng (rút ngắn thời gian, mở rộng kho).  
+✔ Tạo loyalty program (ưu đãi cho KH lâu năm, cashback).  
+✔ Cải thiện phương thức thanh toán & kênh truy cập.  
+✔ Ứng dụng AI để nhận diện & ngăn chặn churn sớm. 
 
 
 
