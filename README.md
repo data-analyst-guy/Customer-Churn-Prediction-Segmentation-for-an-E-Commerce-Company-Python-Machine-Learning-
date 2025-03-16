@@ -29,25 +29,35 @@ Dự án này nhằm phân tích hành vi khách hàng và dự đoán khả nă
 ### 📌 Data Source
 - **Nguồn**: Cung cấp bởi công ty Ecommerce.
 - **Định dạng**: `.xlsx`
-- **Kích thước**: Gồm nhiều cột với thông tin về hành vi mua hàng của khách hàng.
+- **Kích thước**: Dữ liệu gồm 5630 dòng và 20 cột dữ liệu
 
 ### 📊 Data Structure & Relationships
 #### 1️⃣ **Tables Used**
 - **Dataset chính**: Chứa thông tin của khách hàng, đơn hàng, và các đặc điểm khác.
 
 #### 2️⃣ **Table Schema & Data Snapshot**
-| Column Name               | Data Type | Description                                           |
-|---------------------------|-----------|-------------------------------------------------------|
-| `CustomerID`             | INT       | Unique ID của khách hàng                             |
-| `Churn`                  | INT       | Flag churn (1 = rời bỏ, 0 = hoạt động)               |
-| `Tenure`                 | INT       | Số tháng khách hàng sử dụng dịch vụ                 |
-| `PreferredLoginDevice`   | TEXT      | Thiết bị đăng nhập ưu tiên                           |
-| `CityTier`               | INT       | Phân loại thành phố                                  |
-| `SatisfactionScore`      | INT       | Điểm hài lòng của khách hàng                         |
-| `OrderCount`             | INT       | Số đơn hàng đã đặt                                   |
-| `DaySinceLastOrder`      | INT       | Số ngày kể từ lần đặt hàng gần nhất                 |
-| `Complain`               | INT       | Phản ánh khiếu nại của khách hàng                   |
-| `CashbackAmount`         | FLOAT     | Số tiền hoàn lại trung bình                         |
+| Tên Cột                          | Kiểu Dữ Liệu | Mô Tả                                              |
+|-----------------------------------|-------------|----------------------------------------------------|
+| `CustomerID`                     | INT         | ID duy nhất của khách hàng                         |
+| `Churn`                          | INT         | Cờ churn (1 = rời bỏ, 0 = hoạt động)               |
+| `Tenure`                         | INT         | Số tháng khách hàng đã sử dụng dịch vụ             |
+| `PreferredLoginDevice`           | TEXT        | Thiết bị đăng nhập ưu tiên của khách hàng         |
+| `CityTier`                       | INT         | Phân loại thành phố                                |
+| `WarehouseToHome`                | FLOAT       | Khoảng cách từ kho đến nhà khách hàng              |
+| `PreferredPaymentMode`           | TEXT        | Phương thức thanh toán ưa thích                    |
+| `Gender`                         | TEXT        | Giới tính của khách hàng                           |
+| `HourSpendOnApp`                 | FLOAT       | Số giờ sử dụng ứng dụng hoặc trang web             |
+| `NumberOfDeviceRegistered`       | INT         | Tổng số thiết bị đã đăng ký                        |
+| `PreferedOrderCat`               | TEXT        | Danh mục đơn hàng ưa thích trong tháng gần nhất    |
+| `SatisfactionScore`              | INT         | Điểm hài lòng của khách hàng                       |
+| `MaritalStatus`                  | TEXT        | Tình trạng hôn nhân của khách hàng                 |
+| `NumberOfAddress`                | INT         | Tổng số địa chỉ đã đăng ký                         |
+| `Complain`                       | INT         | Có khiếu nại trong tháng gần nhất hay không        |
+| `OrderAmountHikeFromLastYear`    | FLOAT       | Tỷ lệ tăng giá trị đơn hàng so với năm trước       |
+| `CouponUsed`                     | INT         | Tổng số phiếu giảm giá đã sử dụng trong tháng gần nhất |
+| `OrderCount`                     | INT         | Tổng số đơn hàng đã đặt trong tháng gần nhất       |
+| `DaySinceLastOrder`              | INT         | Số ngày kể từ đơn hàng gần nhất                    |
+| `CashbackAmount`                 | FLOAT       | Số tiền hoàn lại trung bình trong tháng gần nhất   |
 
 ---
 
