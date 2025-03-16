@@ -8,7 +8,7 @@
 
 ---
 
-# 📌 Background & Overview
+## Background & Overview
 
 ### 🎯 Objective:
 Dự án này nhằm phân tích hành vi khách hàng và dự đoán khả năng rời bỏ dịch vụ (**churn**). Dựa trên dữ liệu giao dịch của khách hàng, chúng tôi muốn:
@@ -24,7 +24,7 @@ Dự án này nhằm phân tích hành vi khách hàng và dự đoán khả nă
 
 ---
 
-## 📂 Dataset Description & Data Structure
+## Dataset Description & Data Structure
 
 ### 📌 Data Source
 - **Nguồn**: Cung cấp bởi công ty Ecommerce.
@@ -61,7 +61,7 @@ Dự án này nhằm phân tích hành vi khách hàng và dự đoán khả nă
 
 ---
 
-## ⚒️ Main Process
+## Main Process
 
 ### 1️⃣ **Data Cleaning & Preprocessing**
 - Kiểm tra dữ liệu thiếu 
@@ -764,7 +764,7 @@ OrderAmountHikeFromLastYear – Sự gia tăng số lượng đơn hàng so vớ
 CashbackAmount_transformed – Số tiền hoàn lại mà khách hàng nhận được.
 DaySinceLastOrder – Số ngày kể từ lần đặt hàng gần nhất.
 
-## 🔎 Final Conclusion & Recommendations  
+## Final Conclusion & Recommendations  
 
 ✅ Tóm tắt kết quả mô hình:  
 ✔️ CatBoost đạt độ chính xác cao nhất với AUC = 0.99, cho thấy mô hình rất mạnh mẽ trong việc phân loại.  
