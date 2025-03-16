@@ -210,8 +210,8 @@ plt.show()
     df['OrderCount'] = df['OrderCount'].fillna(df['OrderCount'].median())
     ```
 🔍 Xử lý NaN cho `CouponUsed` và `DaySinceLastOrder`
-📌 Lý do chọn `0` thay vì mean/median:
-✅ **Dữ liệu có phân bố lệch (skewed distribution)** → Mean không phản ánh trung thực.  
+📌 Lý do chọn `0` thay vì mean/median:  
+✅ **Dữ liệu có phân bố lệch (skewed distribution)** → Mean không phản ánh trung thực.   
 ✅ **Nhiều giá trị `0` trong dữ liệu** → NaN có khả năng đại diện cho **"không có hoạt động"** thay vì giá trị bị mất.  
 ✅ **Điền bằng `0` giúp giữ nguyên ý nghĩa thực tế của dữ liệu**:  
    - **`CouponUsed = 0`** → Khách hàng **chưa sử dụng** phiếu giảm giá.  
