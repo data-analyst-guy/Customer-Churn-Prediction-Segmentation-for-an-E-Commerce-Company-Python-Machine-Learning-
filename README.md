@@ -8,7 +8,7 @@
 
 ---
 
-## 📌 Background & Overview
+# 📌 Background & Overview
 
 ### 🎯 Objective:
 Dự án này nhằm phân tích hành vi khách hàng và dự đoán khả năng rời bỏ dịch vụ (**churn**). Dựa trên dữ liệu giao dịch của khách hàng, chúng tôi muốn:
