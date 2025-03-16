@@ -308,9 +308,123 @@ df['OrderCount'] = df['OrderCount'].fillna(df['OrderCount'].median())
 ## Churn = 1 (Rời bỏ):
 - Tenure chủ yếu tập trung dưới 10 tháng.
 - Ít khách hàng có Tenure cao.
-- Phân bố hẹp, lệch về phía giá trị thấp.
+- Phân bố hẹp, lệch về phía giá trị thấp.  
 
-![image](https://github.com/user-attachments/assets/7f42229d-0971-488e-982c-c004f85b0fce)
+
+# 📊 Ma trận Churn vs Complain  
+
+|                     | Không khiếu nại (0) | Có khiếu nại (1) |
+|---------------------|-----------------|-----------------|
+| **Không rời bỏ (0)** | 3586            | 1096            |
+| **Rời bỏ (1)**       | 440             | 508             |
+
+### 📌 Nhận xét  
+- **Phần lớn khách hàng không rời bỏ (Churn = 0)** thuộc nhóm **không khiếu nại (3586 người)**.  
+- **Khách hàng có khiếu nại (Complain = 1)** có tỷ lệ rời bỏ cao hơn:  
+  - **508 khách hàng** rời bỏ sau khi khiếu nại.  
+  - So với chỉ **440 khách hàng** rời bỏ mà không khiếu nại.  
+- **Tóm lại**, khiếu nại có thể là một dấu hiệu báo trước về churn, nhưng không phải tất cả khách hàng khiếu nại đều rời bỏ.
+
+![image](https://github.com/user-attachments/assets/bc593a14-f9bc-44dd-b09b-880498acb57f)
+![image](https://github.com/user-attachments/assets/d4be2b44-b30d-4472-b716-563a2dbf575f)
+
+# Phân tích Boxplot: CashbackAmount vs Churn
+
+## 1. Tổng quan
+Biểu đồ hộp (boxplot) dưới đây thể hiện phân phối của **CashbackAmount** theo trạng thái **Churn** (rời bỏ hoặc không rời bỏ).
+
+![Boxplot CashbackAmount vs Churn](image.png)
+
+## 2. Nhận xét
+- **Churn = 0 (Không rời bỏ)**  
+  - Khoảng phân vị 50% (IQR) của CashbackAmount nằm trong khoảng **~120 đến ~200**.  
+  - Có một số giá trị ngoại lệ rất cao, lên đến **hơn 300**.  
+  - Trung vị (median) cao hơn so với nhóm Churn = 1.  
+
+- **Churn = 1 (Rời bỏ)**  
+  - Khoảng IQR thấp hơn, nằm trong khoảng **~100 đến ~160**.  
+  - Trung vị của nhóm này thấp hơn nhóm không rời bỏ.  
+  - Có nhiều giá trị ngoại lệ nhưng thấp hơn so với nhóm Churn = 0.  
+
+## 3. Kết luận
+- Nhìn chung, khách hàng không rời bỏ (**Churn = 0**) có xu hướng nhận **CashbackAmount cao hơn**.  
+- Nhóm khách hàng rời bỏ (**Churn = 1**) nhận cashback thấp hơn, nhưng vẫn có một số trường hợp ngoại lệ.  
+- Điều này có thể gợi ý rằng **việc hoàn tiền nhiều có thể giúp giữ chân khách hàng**, nhưng cần thêm phân tích để xác định tác động thực sự của cashback đến churn.  
+
+![image](https://github.com/user-attachments/assets/398e2e74-af7c-45ac-8932-0d542c35b7a9)
+
+## 🔎 Phân tích Violin Plot: DaySinceLastOrder vs Churn
+
+### 1️⃣ Nhóm Không Rời Bỏ (Churn = 0)
+- Phần lớn khách hàng có `DaySinceLastOrder` thấp (gần 0), nghĩa là họ thường xuyên đặt hàng.
+- Một số ít khách hàng có khoảng thời gian dài giữa các lần đặt hàng, nhưng họ vẫn tiếp tục mua hàng.
+
+### 2️⃣ Nhóm Rời Bỏ (Churn = 1)
+Có hai nhóm khách hàng rõ rệt:
+
+#### 🟢 Nhóm có `DaySinceLastOrder` thấp:
+- Họ vừa đặt hàng gần đây nhưng vẫn rời bỏ. Điều này có thể do:
+  - Trải nghiệm kém với lần mua cuối cùng.
+  - Khuyến mãi hoặc ưu đãi không còn hấp dẫn.
+
+#### 🔴 Nhóm có `DaySinceLastOrder` cao:
+- Họ đã lâu không đặt hàng trước khi rời bỏ.
+- Điều này thường gặp ở khách hàng mất hứng thú hoặc chuyển sang dịch vụ khác.
+
+![image](https://github.com/user-attachments/assets/58f61245-99bf-40bc-90cc-7612f9469824)
+
+## 📊 Biểu đồ Thanh Phân Kỳ (Diverging Bar Chart) cho Các Biến Định Tính
+
+### 🔹 Mô tả:
+- **Biểu đồ thanh phân kỳ** giúp trực quan hóa mối quan hệ giữa các biến định tính và biến mục tiêu `Churn`.
+- Các thanh màu **xanh lá cây** đại diện cho khách hàng **không rời bỏ** (`Churn = 0`).
+- Các thanh màu **đỏ** đại diện cho khách hàng **rời bỏ** (`Churn = 1`).
+- Biểu đồ giúp xác định nhóm khách hàng nào có tỷ lệ rời bỏ cao hơn dựa trên từng đặc điểm cụ thể.
+
+### 🔹 Code:
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Function to plot diverging bar chart
+def plot_diverging_bar_chart(df, categorical_cols, target):
+    for col in categorical_cols:
+        # Create a cross-tabulation of counts normalized by columns to get percentages
+        cross_tab = pd.crosstab(df[col], df[target], normalize='columns') * 100
+
+        # Ensure both churn values (0 and 1) are present in the columns
+        if 0 not in cross_tab.columns:
+            cross_tab[0] = 0
+        if 1 not in cross_tab.columns:
+            cross_tab[1] = 0
+
+        cross_tab = cross_tab[[0, 1]]  # Ensure the order of columns is [0, 1]
+
+        # Plotting
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+        # Plot bars for churn = 0
+        bars0 = ax.barh(cross_tab.index, cross_tab[0], color='green', alpha=0.6, label='Churn = 0')
+
+        # Plot bars for churn = 1
+        bars1 = ax.barh(cross_tab.index, -cross_tab[1], color='red', alpha=0.6, label='Churn = 1')
+
+        ax.set_title(f'Diverging Bar Chart for {col}')
+        ax.set_xlabel('Percentage')
+        ax.axvline(0, color='grey', linewidth=0.8)
+        ax.legend()
+        plt.show()
+
+# Plot the charts
+plot_diverging_bar_chart(df, categorical_cols, 'Churn')
+
+![image](https://github.com/user-attachments/assets/885b4963-7361-44d4-bbe0-ca1ee88ab4b7)  
+![image](https://github.com/user-attachments/assets/e551dbb8-a41e-4576-9408-0a887f139a31)  
+![image](https://github.com/user-attachments/assets/42805c46-d446-4139-a408-ca54cf0d3856)  
+![image](https://github.com/user-attachments/assets/19261fc2-d897-4c9c-9301-ae482d14c870)  
+![image](https://github.com/user-attachments/assets/3c57f2c8-6b8a-4591-a9fe-54c21122d597)  
+
 
 
 ### 3️⃣ **SQL/Python Analysis & Machine Learning**
