@@ -209,7 +209,7 @@ plt.show()
     df['OrderAmountHikeFromlastYear'] = df['OrderAmountHikeFromlastYear'].fillna(df['OrderAmountHikeFromlastYear'].median())
     df['OrderCount'] = df['OrderCount'].fillna(df['OrderCount'].median())
     ```
-🔍 Xử lý NaN cho `CouponUsed` và `DaySinceLastOrder`
+🔍 Xử lý NaN cho `CouponUsed` và `DaySinceLastOrder`  
 📌 Lý do chọn `0` thay vì mean/median:  
 ✅ **Dữ liệu có phân bố lệch (skewed distribution)** → Mean không phản ánh trung thực.   
 ✅ **Nhiều giá trị `0` trong dữ liệu** → NaN có khả năng đại diện cho **"không có hoạt động"** thay vì giá trị bị mất.  
@@ -221,28 +221,31 @@ plt.show()
     df['CouponUsed'] = df['CouponUsed'].fillna(0)
     df['DaySinceLastOrder'] = df['DaySinceLastOrder'].fillna(0)
     ```
-### 2️⃣ **Exploratory Data Analysis (EDA)**
-## 📊 Phân tích phân bố Tenure theo nhóm Churn & Active
+### 2️⃣ **Exploratory Data Analysis (EDA) and Hypothesis Testing**
+### 🔍 Kiểm định thống kê giữa các biến và Churn
 
-### 1️⃣ Quan sát biểu đồ  
-🟢 **Màu xanh (Churn = 0 - Khách hàng đang hoạt động):**  
-- Phân bố lệch phải, phần lớn khách hàng có **Tenure nhỏ (< 10 tháng)**.  
-- Một số khách hàng trung thành có **Tenure cao hơn (20-30 tháng)**.  
-- **Lượng lớn khách hàng có Tenure = 0**, có thể do giá trị bị thay thế.  
+Để kiểm tra xem các biến có ảnh hưởng đáng kể đến Churn hay không, chúng tôi thực hiện kiểm định thống kê:
 
-🔴 **Màu đỏ (Churn = 1 - Khách hàng rời bỏ):**  
-- Tập trung mạnh ở **Tenure thấp (0 - 5 tháng)**.  
-- Điều này cho thấy phần lớn khách hàng rời bỏ trong những tháng đầu tiên.  
-![image](https://github.com/user-attachments/assets/e9b15b61-9383-4496-a1f7-f5ca21bdc589) 
-### 2️⃣ Ý nghĩa từ dữ liệu  
-🚨 **Khách hàng mới (< 5 tháng) có nguy cơ rời bỏ rất cao**  
-   → Cần có **chiến lược giữ chân khách hàng** ngay từ giai đoạn đầu.  
+### 📊 1️⃣ Kiểm định biến định lượng  
+- **Phương pháp:**  
+  - **T-test**: Dùng nếu dữ liệu có phân phối chuẩn.  
+  - **Mann-Whitney U test**: Dùng nếu dữ liệu không có phân phối chuẩn.  
+- **Ý nghĩa:** Nếu `p-value < 0.05`, có sự khác biệt đáng kể giữa nhóm Churn và Non-Churn.  
 
-🎯 **Khách hàng có Tenure dài hơn có tỷ lệ churn thấp**  
-   → Xây dựng **chương trình khách hàng thân thiết** để giảm churn.  
+### 🏷️ 2️⃣ Kiểm định biến định tính  
+- **Phương pháp:**  
+  - **Chi-Square Test**: Kiểm tra sự khác biệt về tần suất xuất hiện giữa hai nhóm.  
+  - **Cramer’s V**: Đo lường mức độ ảnh hưởng của biến định tính lên Churn.  
+- **Ý nghĩa:** Nếu `p-value < 0.05`, biến này có ảnh hưởng đáng kể đến Churn.  
 
+### ✅ **Kết quả kiểm định**  
+Sau khi thực hiện kiểm định, chúng tôi rút ra kết luận:
+- Các biến **Tenure, SatisfactionScore, OrderCount, CouponUsed** có ảnh hưởng đáng kể đến Churn.
+- Một số biến như **WarehouseToHome, Gender** không có tác động mạnh đến Churn.
+- Kết quả này giúp xác định những yếu tố quan trọng trong mô hình dự đoán Churn.
 
-- Xác định mối quan hệ giữa `Churn` và các biến độc lập (`SatisfactionScore`, `OrderCount`, `DaySinceLastOrder`).
+📌 **Chi tiết kiểm định có thể tham khảo trong file notebook `churn_prediction.ipynb`.**
+
 
 ### 3️⃣ **SQL/Python Analysis & Machine Learning**
 - **Chia tập dữ liệu**: Sử dụng `train_test_split` để tách tập train/test.
