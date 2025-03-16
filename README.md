@@ -201,8 +201,28 @@ plt.show()
     df['DaySinceLastOrder'] = df['DaySinceLastOrder'].fillna(0)
     ```
 ### 2️⃣ **Exploratory Data Analysis (EDA)**
-- Phân tích phân bố dữ liệu theo nhóm churn & active.
-- Trực quan hóa dữ liệu bằng biểu đồ.
+
+![image](https://github.com/user-attachments/assets/e9b15b61-9383-4496-a1f7-f5ca21bdc589)
+## 📊 Phân tích phân bố Tenure theo nhóm Churn & Active
+
+### 1️⃣ Quan sát biểu đồ  
+🟢 **Màu xanh (Churn = 0 - Khách hàng đang hoạt động):**  
+- Phân bố lệch phải, phần lớn khách hàng có **Tenure nhỏ (< 10 tháng)**.  
+- Một số khách hàng trung thành có **Tenure cao hơn (20-30 tháng)**.  
+- **Lượng lớn khách hàng có Tenure = 0**, có thể do giá trị bị thay thế.  
+
+🔴 **Màu đỏ (Churn = 1 - Khách hàng rời bỏ):**  
+- Tập trung mạnh ở **Tenure thấp (0 - 5 tháng)**.  
+- Điều này cho thấy phần lớn khách hàng rời bỏ trong những tháng đầu tiên.  
+
+### 2️⃣ Ý nghĩa từ dữ liệu  
+🚨 **Khách hàng mới (< 5 tháng) có nguy cơ rời bỏ rất cao**  
+   → Cần có **chiến lược giữ chân khách hàng** ngay từ giai đoạn đầu.  
+
+🎯 **Khách hàng có Tenure dài hơn có tỷ lệ churn thấp**  
+   → Xây dựng **chương trình khách hàng thân thiết** để giảm churn.  
+
+
 - Xác định mối quan hệ giữa `Churn` và các biến độc lập (`SatisfactionScore`, `OrderCount`, `DaySinceLastOrder`).
 
 ### 3️⃣ **SQL/Python Analysis & Machine Learning**
