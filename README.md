@@ -136,9 +136,7 @@ df['Tenure'] = df['Tenure'].fillna(0)
 - Nếu thay bằng trung bình, có thể mất thông tin quan trọng về hành vi của khách hàng mới.  
 
 ✅ **Chọn `fillna(0)` giúp dữ liệu chính xác hơn, tránh sai lệch và hỗ trợ phân tích tốt hơn.**
-
 ---
-
 #### 📌 Xử lý cột `WarehouseToHome`
 - Vẽ biểu đồ phân bố **WarehouseToHome** theo trạng thái Churn:
 
@@ -155,7 +153,6 @@ plt.ylabel('Frequency')
 plt.legend()
 plt.show()
 ```
-
 - **Xử lý dữ liệu trống**: Thay thế các giá trị NaN bằng giá trị trung vị:
 ```python
 df['WarehouseToHome'] = df['WarehouseToHome'].fillna(df['WarehouseToHome'].median())
@@ -204,11 +201,11 @@ plt.show()
 ```
 
 - **Xử lý dữ liệu trống**:
-  - Thay thế **NaN** bằng trung bình (`mean`):  
-    ```python
-    df['OrderAmountHikeFromlastYear'] = df['OrderAmountHikeFromlastYear'].fillna(df['OrderAmountHikeFromlastYear'].median())
-    df['OrderCount'] = df['OrderCount'].fillna(df['OrderCount'].median())
-    ```
+- Thay thế **NaN** bằng trung bình (`mean`):  
+```python
+df['OrderAmountHikeFromlastYear'] = df['OrderAmountHikeFromlastYear'].fillna(df['OrderAmountHikeFromlastYear'].median())
+df['OrderCount'] = df['OrderCount'].fillna(df['OrderCount'].median())
+```
 🔍 Xử lý NaN cho `CouponUsed` và `DaySinceLastOrder`  
 📌 Lý do chọn `0` thay vì mean/median:  
 ✅ **Dữ liệu có phân bố lệch (skewed distribution)** → Mean không phản ánh trung thực.   
@@ -236,16 +233,72 @@ plt.show()
 - **Phương pháp:**  
   - **Chi-Square Test**: Kiểm tra sự khác biệt về tần suất xuất hiện giữa hai nhóm.  
   - **Cramer’s V**: Đo lường mức độ ảnh hưởng của biến định tính lên Churn.  
-- **Ý nghĩa:** Nếu `p-value < 0.05`, biến này có ảnh hưởng đáng kể đến Churn.  
+- **Ý nghĩa:** Nếu `p-value < 0.05`, biến này có ảnh hưởng đáng kể đến Churn.
 
-### ✅ **Kết quả kiểm định**  
-Sau khi thực hiện kiểm định, chúng tôi rút ra kết luận:
-- Các biến **Tenure, SatisfactionScore, OrderCount, CouponUsed** có ảnh hưởng đáng kể đến Churn.
-- Một số biến như **WarehouseToHome, Gender** không có tác động mạnh đến Churn.
-- Kết quả này giúp xác định những yếu tố quan trọng trong mô hình dự đoán Churn.
+### 🔍 Kết quả kiểm định thống kê biến định lượng và Churn  
 
-📌 **Chi tiết kiểm định có thể tham khảo trong file notebook `churn_prediction.ipynb`.**
+| **Biến**                     | **p-value**         | **Effect Size** |
+|------------------------------|--------------------|----------------|
+| **Tenure**                   | 2.70 × 10⁻¹⁹⁴     | 0.92 (Rất lớn) |
+| **Complain**                 | 1.31 × 10⁻⁷⁸     | 0.67 (Lớn)     |
+| **CashbackAmount**           | 2.52 × 10⁻³⁸     | 0.41 (Trung bình - lớn) |
+| **DaySinceLastOrder**        | 2.85 × 10⁻³⁸     | 0.40 (Trung bình - lớn) |
+| **SatisfactionScore**        | 3.75 × 10⁻¹⁵     | 0.28 (Trung bình) |
+| **NumberOfDeviceRegistered** | 3.05 × 10⁻¹⁴     | 0.29 (Trung bình) |
+| **CityTier**                 | 1.62 × 10⁻¹⁰     | 0.23 (Nhỏ - Trung bình) |
+| **WarehouseToHome**          | 2.04 × 10⁻⁹      | 0.18 (Nhỏ) |
+| **OrderCount**               | 2.21 × 10⁻³      | 0.076 (Rất nhỏ) |
+| **NumberOfAddress**          | 3.05 × 10⁻²      | 0.12 (Rất nhỏ) |
+| **OrderAmountHikeFromLastYear** | 7.54 × 10⁻²  | 0.027 (Không đáng kể) |
+| **CustomerID**               | 1.52 × 10⁻¹      | 0.051 (Không đáng kể) |
+| **HourSpendOnApp**           | 2.09 × 10⁻¹      | 0.050 (Không đáng kể) |
+| **CouponUsed**               | 4.49 × 10⁻¹      | 0.020 (Không đáng kể) |
 
+### 🔍 Kết luận kiểm định biến định lượng và Churn  
+
+### 📌 1️⃣ Biến có ảnh hưởng mạnh đến Churn (p-value rất nhỏ, effect size lớn > 0.4)  
+✅ **Tenure** (p = 2.7 × 10⁻¹⁹⁴, effect size = 0.92) → Ảnh hưởng rất lớn đến Churn.  
+✅ **Complain** (p = 1.3 × 10⁻⁷⁸, effect size = 0.67) → Khách hàng có khiếu nại có xu hướng rời bỏ cao.  
+✅ **CashbackAmount** (p = 2.5 × 10⁻³⁸, effect size = 0.41) → Số tiền hoàn lại ảnh hưởng đến Churn.  
+✅ **DaySinceLastOrder** (p = 2.8 × 10⁻³⁸, effect size = 0.40) → Khách hàng càng lâu không mua hàng càng dễ rời bỏ.  
+
+### 📌 2️⃣ Biến có ảnh hưởng trung bình đến Churn (p-value nhỏ, effect size từ 0.2 - 0.4)  
+🔹 **SatisfactionScore** (p = 3.75 × 10⁻¹⁵, effect size = 0.28) → Điểm hài lòng thấp làm tăng tỷ lệ Churn.  
+🔹 **NumberOfDeviceRegistered** (p = 3.05 × 10⁻¹⁴, effect size = 0.29) → Khách hàng đăng ký nhiều thiết bị có tỷ lệ Churn thấp hơn.  
+🔹 **CityTier** (p = 1.61 × 10⁻¹⁰, effect size = 0.22) → Tầng lớp thành phố ảnh hưởng đến Churn.  
+🔹 **WarehouseToHome** (p = 2.04 × 10⁻⁹, effect size = 0.18) → Khoảng cách từ kho đến nhà có ảnh hưởng nhỏ đến Churn.  
+
+### 📌 3️⃣ Biến có ảnh hưởng yếu đến Churn (p-value > 0.01, effect size < 0.2)  
+🔹 **OrderCount** (p = 0.002, effect size = 0.075) → Số lượng đơn hàng có ảnh hưởng nhỏ đến Churn.  
+🔹 **NumberOfAddress** (p = 0.03, effect size = 0.11) → Số địa chỉ được lưu có ảnh hưởng nhỏ.  
+🔹 **OrderAmountHikeFromLastYear** (p = 0.075, effect size = 0.02) → Không có ý nghĩa thống kê mạnh.  
+
+### 📌 4️⃣ Biến không có ảnh hưởng đáng kể đến Churn (p-value > 0.05)  
+❌ **CustomerID** (p = 0.152) → Không có ý nghĩa trong dự đoán Churn.  
+❌ **HourSpendOnApp** (p = 0.209) → Thời gian sử dụng app không ảnh hưởng nhiều đến Churn.  
+❌ **CouponUsed** (p = 0.449) → Sử dụng coupon không có mối quan hệ đáng kể với Churn.  
+---
+### 📌 Kết luận chung về biến định lượng  
+✅ **Các biến ảnh hưởng mạnh đến Churn:** `Tenure`, `Complain`, `CashbackAmount`, `DaySinceLastOrder`.  
+✅ **Các biến có ảnh hưởng trung bình:** `SatisfactionScore`, `NumberOfDeviceRegistered`, `CityTier`, `WarehouseToHome`.  
+✅ **Các biến có ảnh hưởng yếu hoặc không đáng kể:** `OrderCount`, `NumberOfAddress`, `OrderAmountHikeFromLastYear`, `HourSpendOnApp`, `CouponUsed`.  
+
+### 🔍 Kết quả kiểm định thống kê biến định tính và Churn  
+
+| **Biến**                     | **p-value**         | **Cramér's V** | **Mức độ ảnh hưởng** |
+|------------------------------|--------------------|---------------|---------------------|
+| **PreferedOrderCat**         | 2.77 × 10⁻⁶⁰      | 0.226         | Ảnh hưởng trung bình |
+| **MaritalStatus**            | 1.07 × 10⁻⁴¹      | 0.183         | Ảnh hưởng nhỏ - trung bình |
+| **PreferredLoginDevice**     | 1.08 × 10⁻¹⁶      | 0.114         | Ảnh hưởng nhỏ |
+| **PreferredPaymentMode**     | 9.71 × 10⁻¹⁵      | 0.118         | Ảnh hưởng nhỏ |
+| **Gender**                   | 3.08 × 10⁻²       | 0.029         | Không đáng kể |
+---
+### 📌 Kết luận:
+- **Biến có ảnh hưởng trung bình đến Churn:** `PreferedOrderCat`, `MaritalStatus`.  
+- **Biến có ảnh hưởng nhỏ đến Churn:** `PreferredLoginDevice`, `PreferredPaymentMode`.  
+- **Biến không có ảnh hưởng đáng kể:** `Gender`.  
+
+![image](https://github.com/user-attachments/assets/7f42229d-0971-488e-982c-c004f85b0fce)
 
 ### 3️⃣ **SQL/Python Analysis & Machine Learning**
 - **Chia tập dữ liệu**: Sử dụng `train_test_split` để tách tập train/test.
