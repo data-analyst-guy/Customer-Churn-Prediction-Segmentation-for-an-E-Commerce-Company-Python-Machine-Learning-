@@ -1,4 +1,4 @@
-# 📊 Project: Customer Churn Prediction & Segmentation for an E-Commerce Company | Python, Machine Learning 
+![image](https://github.com/user-attachments/assets/2c08113b-2528-4382-aba0-3d9bc106e544)# 📊 Project: Customer Churn Prediction & Segmentation for an E-Commerce Company | Python, Machine Learning 
 
 ## 📑 Table of Contents
 1. [Background & Overview](#background--overview)
@@ -516,17 +516,244 @@ Lambda value used for transformation: -0.2843229410352237
 ![image](https://github.com/user-attachments/assets/e664c4c0-db6f-4bdf-a580-0f77a80a3f5d)
 
 - **Chia tập dữ liệu**:
+## 🏆 Chia Dữ Liệu Train/Test
+
+### 📌 Mô tả:
+- Chia dữ liệu thành tập **huấn luyện (train)** và **kiểm tra (test)**.
+- **80% dữ liệu** được sử dụng để huấn luyện mô hình.
+- **20% dữ liệu** được sử dụng để đánh giá hiệu suất mô hình.
+
+### 🖥️ Code:
+```python
+from sklearn.model_selection import train_test_split
+
+# Chia tập dữ liệu thành train (80%) và test (20%)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+```
 - **Thử nghiệm các mô hình**:
   ✔️ Logistic Regression  
-  ✔️ Random Forest  
-  ✔️ XGBoost  
-- **Đánh giá mô hình**:
-  - AUC-ROC
-  - F1-score
-  - XGBoost đạt độ chính xác cao nhất.
+  ✔️ Random Forest
+## 📌 Mô tả:
+- Sử dụng **Random Forest Classifier** để phân loại dữ liệu.
+- Đánh giá mô hình dựa trên các chỉ số **accuracy, precision, recall, roc_auc_score**.
+- Trực quan hóa kết quả bằng **ma trận nhầm lẫn** và **đường cong ROC**.
+
+## 🖥️ Code:
+```python
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import roc_curve, auc, precision_score, recall_score, accuracy_score, classification_report, confusion_matrix, roc_auc_score
+from sklearn.model_selection import cross_val_score
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Khởi tạo mô hình RandomForest
+RF = RandomForestClassifier(n_estimators=100, random_state=42)
+
+# Huấn luyện mô hình
+RF.fit(X_train, y_train)
+
+# Dự đoán trên tập kiểm tra
+y_pred = RF.predict(X_test)  # Số nguyên: {0,1}
+y_pred_prob = RF.predict_proba(X_test)[:, 1]  # Xác suất dự đoán cho lớp dương tính, số lẻ
+
+# Tính các chỉ số precision và recall
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+accuracy = accuracy_score(y_test, y_pred)
+roc_auc = roc_auc_score(y_test, y_pred_prob)
+
+# In kết quả
+print(f'Accuracy: {accuracy * 100:.2f}%')
+print(f'Precision: {precision * 100:.2f}%')
+print(f'Recall: {recall * 100:.2f}%')
+print(f'roc_auc_score: {roc_auc * 100:.2f}%')
+
+# Bảng đánh giá classification report
+report = classification_report(y_test, y_pred)
+print("Classification Report:\n", report)
+
+# Ma trận nhầm lẫn (Confusion Matrix)
+conf_matrix = confusion_matrix(y_test, y_pred)
+
+# Vẽ ma trận nhầm lẫn
+plt.figure(figsize=(8, 5))
+sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues')
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.title('Confusion Matrix')
+plt.show()
+
+# Tính FPR, TPR cho đường cong ROC
+fpr, tpr, _ = roc_curve(y_test, y_pred_prob)
+
+# Tính AUC (Area Under the Curve)
+roc_auc = auc(fpr, tpr)
+
+# Vẽ đường cong ROC
+plt.figure()
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic (ROC) Curve')
+plt.legend(loc="lower right")
+plt.show()
+```
+![image](https://github.com/user-attachments/assets/bb7a51b8-2345-4e01-b9b3-a6ddeddb9bc2)
+
+# Kiểm tra Overfitting bằng K-Fold Cross-Validation
+
+Trong bước này, chúng ta sử dụng **K-Fold Cross-Validation (k=5)** để đánh giá mức độ overfitting của mô hình **Random Forest**.
+
+## 📌 Code thực hiện K-Fold Cross-Validation
+
+```python
+from sklearn.model_selection import cross_val_score
+import numpy as np
+
+# Áp dụng k-fold cross-validation (vd: k=5) trên tập huấn luyện
+cv_scores = cross_val_score(RF, X_train, y_train, cv=5)
+
+# Chuyển đổi các điểm số từ dạng tỉ lệ sang phần trăm
+cv_scores_percent = np.round(cv_scores * 100, 2)
+
+# In kết quả đánh giá từng fold dưới dạng phần trăm
+print("Cross-validation scores (%):", [f"{score:.2f}%" for score in cv_scores_percent])
+
+# In trung bình và độ lệch chuẩn của các điểm số cross-validation dưới dạng phần trăm
+print(f"Mean CV score (%): {np.mean(cv_scores_percent):.2f}% +/- {np.std(cv_scores_percent):.2f}%")
+```
+# 🎯 Kiểm tra Overfitting bằng K-Fold Cross-Validation
+
+Trong bước này, chúng ta sử dụng **K-Fold Cross-Validation (k=5)** để đánh giá mức độ overfitting của mô hình **Random Forest**.
 
 ---
 
+## 📌 **Kết quả Cross-Validation**
+Sau khi thực hiện K-Fold (k=5), chúng ta thu được kết quả sau:
+
+```python
+Cross-validation scores (%): ['94.23%', '94.34%', '96.12%', '94.01%', '96.89%']
+Mean CV score (%): 95.12% +/- 1.16%
+```
+🔍 Phân tích kết quả
+📌 Mean CV score: 95.12% → Mô hình hoạt động tốt trên tập huấn luyện.
+📉 Độ lệch chuẩn: 1.16% → Điểm số cross-validation khá ổn định, không có dấu hiệu rõ ràng của overfitting.
+🔄 Điểm số của từng fold dao động trong khoảng 94% - 96.89%, điều này cho thấy mô hình có độ ổn định tốt.
+
+# 📊 Feature Importance - Đánh giá tầm quan trọng của từng đặc trưng
+
+Sau khi huấn luyện mô hình **Random Forest**, chúng ta kiểm tra mức độ quan trọng của từng đặc trưng (feature) trong dự đoán.
+---
+## 🛠 **Thực hiện**
+Chúng ta sẽ:
+1. **Lấy trọng số quan trọng của từng đặc trưng** từ mô hình Random Forest.
+2. **Sắp xếp các đặc trưng theo mức độ quan trọng giảm dần**.
+3. **Trực quan hóa bằng biểu đồ cột ngang có màu sắc** để dễ dàng phân tích.
+
+---
+## 🔢 **Code thực hiện**
+```python
+# Get feature importances
+importances = RF.feature_importances_
+
+# Sort feature importances in descending order
+indices = np.argsort(importances)[::-1]
+
+# Rearrange feature names so they match the sorted feature importances
+names = [X_train.columns[i] for i in indices]
+
+# Define colors for the bars
+palette = sns.color_palette("husl", n_colors=X_train.shape[1])  # Change "husl" to any other palette
+
+# Plot horizontal bar chart with colored bars
+plt.figure(figsize=(10, 6))
+plt.barh(range(X_train.shape[1]), importances[indices], color=palette)
+plt.yticks(range(X_train.shape[1]), names)
+plt.title("Feature Importances")
+plt.xlabel('Importance')
+plt.gca().invert_yaxis()  # Invert y-axis to display most important features on top
+plt.show()
+```
+![image](https://github.com/user-attachments/assets/ddd10aab-3828-4f29-8a56-691811983167)
+ ✔️ Logistic Regression  
+Kết quả cho ra như sau:
+![image](https://github.com/user-attachments/assets/62be3875-5de7-4d63-945e-6a6efd951397)
+
+ ✔️ CatBoost
+ CatBoost (Categorical Boosting) là một thuật toán Gradient Boosting trên cây quyết định (GBDT), được phát triển bởi Yandex. Nó đặc biệt tối ưu cho dữ liệu có nhiều biến phân loại (Categorical Features) mà không cần One-Hot Encoding. Tuy nhiên vì mình đã Encode rồi nên vẫn tiếp tục thực hiện trên bộ dữ liệu đã encode.
+## 🔢 **Code thực hiện**
+```python
+from catboost import CatBoostClassifier
+# Khởi tạo mô hình CatBoost
+catboost = CatBoostClassifier(iterations=1000,  # số lượng cây quyết định (trees) sẽ xây dựng
+                              learning_rate=0.1,  # tỷ lệ học tập
+                              depth=6,  # độ sâu của mỗi cây
+                              loss_function='Logloss',  # hàm mất mát
+                              eval_metric='Accuracy',  # độ đo đánh giá mô hình
+                              random_seed=42,  # seed để tái sản sinh kết quả
+                              verbose=100)  # in thông tin sau mỗi lần lặp
+
+# Huấn luyện mô hình
+catboost.fit(X_train, y_train, eval_set=(X_test, y_test), plot=True)
+
+# Dự đoán trên tập kiểm tra
+y_pred = catboost.predict(X_test)  # Số nguyên: {0,1}
+y_pred_prob = catboost.predict_proba(X_test)[:, 1]  # Xác suất dự đoán cho lớp dương tính, số lẻ
+
+# Tính các chỉ số precision, recall, accuracy, và roc_auc
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+accuracy = accuracy_score(y_test, y_pred)
+roc_auc = roc_auc_score(y_test, y_pred_prob)
+
+# In kết quả
+print(f'Accuracy: {accuracy * 100:.2f}%')
+print(f'Precision: {precision * 100:.2f}%')
+print(f'Recall: {recall * 100:.2f}%')
+print(f'ROC AUC Score: {roc_auc * 100:.2f}%')
+
+# Bảng đánh giá classification report
+report = classification_report(y_test, y_pred)
+print("Classification Report:\n", report)
+
+# Ma trận nhầm lẫn (Confusion Matrix)
+conf_matrix = confusion_matrix(y_test, y_pred)
+
+# Vẽ ma trận nhầm lẫn
+plt.figure(figsize=(8, 5))
+sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues')
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.title('Confusion Matrix')
+plt.show()
+
+# Tính FPR, TPR cho đường cong ROC
+fpr, tpr, _ = roc_curve(y_test, y_pred_prob)
+
+# Tính AUC (Area Under the Curve)
+roc_auc = auc(fpr, tpr)
+
+# Vẽ đường cong ROC
+plt.figure()
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic (ROC) Curve')
+plt.legend(loc="lower right")
+plt.show()
+```
+![image](https://github.com/user-attachments/assets/d0199511-46e9-4b59-a3f2-18e4c3bee0a8)
+Sau khi huấn luyện mô hình **Cat Boost**, chúng ta kiểm tra mức độ quan trọng của từng đặc trưng (feature) trong dự đoán.
+![image](https://github.com/user-attachments/assets/e771fef6-4bef-4ce8-a031-19549f46f7a3)
+
+- **Đánh giá mô hình**:
+- Catboost đạt độ chính xác cao nhất.
 ## 🔎 Final Conclusion & Recommendations
 
 ### 📌 Key Takeaways:
@@ -552,7 +779,5 @@ Lambda value used for transformation: -0.2843229410352237
 
 ---
 
-## 📌 Liên hệ
-🔗 [LinkedIn của bạn](https://www.linkedin.com/in/your-profile/)  
-📧 Email: your.email@example.com
+
 
