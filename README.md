@@ -86,7 +86,7 @@ def count_NaN_values(df):
 
     NaN_table = pd.DataFrame.from_dict(nan_dict, orient='index', columns=['Number of NaN']).reset_index()
     NaN_table.rename(columns={
-
+```
 - Chuyển đổi kiểu dữ liệu phù hợp.
 - Xử lý outliers nếu cần.
 
