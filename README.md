@@ -64,7 +64,29 @@ Dự án này nhằm phân tích hành vi khách hàng và dự đoán khả nă
 ## ⚒️ Main Process
 
 ### 1️⃣ **Data Cleaning & Preprocessing**
-- Kiểm tra dữ liệu thiếu (`Tenure`, `HourSpendOnApp` có giá trị NaN).
+- Kiểm tra dữ liệu thiếu 
+### 2️⃣ Missing Data Analysis
+
+Để kiểm tra dữ liệu bị thiếu, chúng tôi sử dụng hàm sau:
+
+```python
+import pandas as pd
+
+def count_NaN_values(df):
+    """
+    Hàm để đếm số lượng giá trị NaN trong DataFrame.
+
+    Tham số:
+    df (pandas.DataFrame): DataFrame để đếm giá trị NaN.
+    """
+    nan_dict = {}
+    for col in df.columns:
+        num_NaN = df[col].isna().sum()
+        nan_dict[col] = num_NaN
+
+    NaN_table = pd.DataFrame.from_dict(nan_dict, orient='index', columns=['Number of NaN']).reset_index()
+    NaN_table.rename(columns={
+
 - Chuyển đổi kiểu dữ liệu phù hợp.
 - Xử lý outliers nếu cần.
 
