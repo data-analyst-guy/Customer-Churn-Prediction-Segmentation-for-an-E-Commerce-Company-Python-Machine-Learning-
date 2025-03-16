@@ -297,8 +297,21 @@ df['OrderCount'] = df['OrderCount'].fillna(df['OrderCount'].median())
 - **Biến có ảnh hưởng trung bình đến Churn:** `PreferedOrderCat`, `MaritalStatus`.  
 - **Biến có ảnh hưởng nhỏ đến Churn:** `PreferredLoginDevice`, `PreferredPaymentMode`.  
 - **Biến không có ảnh hưởng đáng kể:** `Gender`.  
+![image](https://github.com/user-attachments/assets/e7c2eb4e-f8f2-4d3e-bd5b-4951acbf8f32)
+# Thống kê mô tả Violin Plot (Tenure vs Churn)
+
+## Churn = 0 (Không rời bỏ):
+- Tenure trải rộng từ 0 đến hơn 60 tháng.
+- Phần lớn khách hàng có Tenure dưới 30 tháng.
+- Phân bố rộng và có nhiều giá trị cao.
+
+## Churn = 1 (Rời bỏ):
+- Tenure chủ yếu tập trung dưới 10 tháng.
+- Ít khách hàng có Tenure cao.
+- Phân bố hẹp, lệch về phía giá trị thấp.
 
 ![image](https://github.com/user-attachments/assets/7f42229d-0971-488e-982c-c004f85b0fce)
+
 
 ### 3️⃣ **SQL/Python Analysis & Machine Learning**
 - **Chia tập dữ liệu**: Sử dụng `train_test_split` để tách tập train/test.
