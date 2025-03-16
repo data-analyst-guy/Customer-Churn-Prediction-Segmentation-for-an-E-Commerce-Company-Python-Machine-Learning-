@@ -118,11 +118,24 @@ plt.show()
 ```python
 df['Tenure'] = df['Tenure'].fillna(0)
 ```
-## 📌 Xử lý dữ liệu Tenure: Vì sao thay NaN bằng 0?
+#### 📌 Xử lý dữ liệu Tenure: Vì sao thay NaN bằng 0?
 
-### 1️⃣ Giả định dữ liệu bị thiếu do khách hàng mới  
+#### 1️⃣ Giả định dữ liệu bị thiếu do khách hàng mới  
 - Tenure là số tháng khách hàng đã gắn bó với công ty.  
-- Nếu giá t
+- Nếu giá trị bị thiếu, có thể do khách hàng mới đăng ký nhưng chưa có đủ dữ liệu.  
+- **Thay thế bằng 0 phản ánh chính xác tình trạng khách hàng mới.**  
+🔹 *Ví dụ:* Khách hàng vừa đăng ký nhưng dữ liệu chưa cập nhật → Tenure bị NaN → Gán **0**.  
+
+#### 2️⃣ Tránh sai lệch khi dùng mean hoặc median  
+- Nếu thay NaN bằng **mean** hoặc **median**, dữ liệu có thể bị lệch.  
+- Khách hàng mới có thể bị gán Tenure lớn hơn thực tế → Dự đoán sai trong mô hình Churn.  
+🔹 *Ví dụ:* Nếu mean = 15 tháng, ta đang giả định khách hàng chưa có dữ liệu đã gắn bó trung bình 15 tháng → **Không chính xác!**  
+
+#### 3️⃣ Tương thích với mô hình phân tích Churn  
+- **Nhóm khách hàng mới dễ dàng nhận diện** khi thay NaN → 0.  
+- Nếu thay bằng trung bình, có thể mất thông tin quan trọng về hành vi của khách hàng mới.  
+
+✅ **Chọn `fillna(0)` giúp dữ liệu chính xác hơn, tránh sai lệch và hỗ trợ phân tích tốt hơn.**
 
 ---
 
