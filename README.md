@@ -427,7 +427,95 @@ plot_diverging_bar_chart(df, categorical_cols, 'Churn')
 
 
 ### 3️⃣ **SQL/Python Analysis & Machine Learning**
-- **Chia tập dữ liệu**: Sử dụng `train_test_split` để tách tập train/test.
+- **Feature Engineering**:
+### Categorical Columns:
+``` python
+for c in categorical_cols:
+    print(f"{c}: {df[c].unique()}")
+```
+ ✅ Data không có quan hệ thứ bậc, sử dụng one-hot encoding để chuyển đổi
+
+ ```python
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.compose import ColumnTransformer
+
+# Định nghĩa ColumnTransformer với OneHotEncoder cho các cột phân loại
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('cat', OneHotEncoder(), categorical_cols)
+    ],
+    remainder='passthrough'  # Giữ lại các cột không được mã hóa
+)
+
+# Áp dụng OneHotEncoder
+df_encoded = preprocessor.fit_transform(df)
+
+# Chuyển đổi thành DataFrame
+df_encoded = pd.DataFrame(df_encoded, columns=preprocessor.get_feature_names_out())
+
+# Loại bỏ tiền tố 'remainder__' trong tên các cột
+df_encoded.columns = [col.replace('remainder__', '') for col in df_encoded.columns]
+
+print(df_encoded.columns)
+```
+### Numerical Columns:
+## Data Transformation Guidelines
+
+| Column Name                    | Transformation Method   |
+|---------------------------------|-------------------------|
+| **Tenure**                      | Box-Cox                 |
+| **CityTier**                    | No transformation       |
+| **WarehouseToHome**             | Box-Cox                 |
+| **HourSpendOnApp**              | No transformation       |
+| **NumberOfDeviceRegistered**    | No transformation       |
+| **SatisfactionScore**           | No transformation       |
+| **NumberOfAddress**             | No transformation       |
+| **Complain**                    | No transformation       |
+| **OrderAmountHikeFromlastYear** | No transformation       |
+| **CouponUsed**                  | No transformation       |
+| **OrderCount**                  | No transformation       |
+| **DaySinceLastOrder**           | No transformation       |
+| **CashbackAmount**              | Standard Scale          |
+
+Phương pháp Box-Cox là một kỹ thuật biến đổi dữ liệu nhằm cải thiện tính chuẩn tắc (normality) của phân phối dữ liệu, giúp các mô hình thống kê hoặc máy học hoạt động hiệu quả hơn. Phương pháp này sử dụng một phép biến đổi mạnh mẽ, có thể chuyển các phân phối không chuẩn thành các phân phối chuẩn (hoặc gần chuẩn), từ đó giúp cải thiện độ chính xác của các mô hình.
+
+Ví dụ Box cox cho Tenure
+``` python
+from scipy import stats
+
+test = df['Tenure'] + 0.5
+
+# Step 2: Apply Box-Cox transformation
+transformed_data, lambda_value = stats.boxcox(test)
+
+# Create a new DataFrame to store transformed values
+df_transformed = df_encoded.copy()
+df_transformed['Tenure_transformed'] = transformed_data
+
+# Step 3: Visualize the transformation
+fig, ax = plt.subplots(1, 2, figsize=(12, 4))
+
+# Plot original data
+ax[0].hist(test, bins=20, edgecolor='black')
+ax[0].set_title('Original Tenure (with added 0.5)')
+ax[0].set_xlabel('Values')
+ax[0].set_ylabel('Frequency')
+
+# Plot transformed data
+ax[1].hist(transformed_data, bins=20, edgecolor='black')
+ax[1].set_title('Box-Cox Transformed Tenure')
+ax[1].set_xlabel('Transformed Values')
+ax[1].set_ylabel('Frequency')
+
+plt.tight_layout()
+plt.show()
+
+print(f"Lambda value used for transformation: {lambda_value}")
+```
+Lambda value used for transformation: -0.2843229410352237 
+![image](https://github.com/user-attachments/assets/e664c4c0-db6f-4bdf-a580-0f77a80a3f5d)
+
+- **Chia tập dữ liệu**:
 - **Thử nghiệm các mô hình**:
   ✔️ Logistic Regression  
   ✔️ Random Forest  
