@@ -118,6 +118,11 @@ plt.show()
 ```python
 df['Tenure'] = df['Tenure'].fillna(0)
 ```
+## 📌 Xử lý dữ liệu Tenure: Vì sao thay NaN bằng 0?
+
+### 1️⃣ Giả định dữ liệu bị thiếu do khách hàng mới  
+- Tenure là số tháng khách hàng đã gắn bó với công ty.  
+- Nếu giá t
 
 ---
 
@@ -142,9 +147,7 @@ plt.show()
 ```python
 df['WarehouseToHome'] = df['WarehouseToHome'].fillna(df['WarehouseToHome'].mean())
 ```
-
 ---
-
 #### 📌 Xử lý cột `HourSpendOnApp`
 - Vẽ biểu đồ phân bố **HourSpendOnApp** theo trạng thái Churn:
 
@@ -201,8 +204,6 @@ plt.show()
     df['DaySinceLastOrder'] = df['DaySinceLastOrder'].fillna(0)
     ```
 ### 2️⃣ **Exploratory Data Analysis (EDA)**
-
-![image](https://github.com/user-attachments/assets/e9b15b61-9383-4496-a1f7-f5ca21bdc589)
 ## 📊 Phân tích phân bố Tenure theo nhóm Churn & Active
 
 ### 1️⃣ Quan sát biểu đồ  
@@ -214,7 +215,7 @@ plt.show()
 🔴 **Màu đỏ (Churn = 1 - Khách hàng rời bỏ):**  
 - Tập trung mạnh ở **Tenure thấp (0 - 5 tháng)**.  
 - Điều này cho thấy phần lớn khách hàng rời bỏ trong những tháng đầu tiên.  
-
+![image](https://github.com/user-attachments/assets/e9b15b61-9383-4496-a1f7-f5ca21bdc589) 
 ### 2️⃣ Ý nghĩa từ dữ liệu  
 🚨 **Khách hàng mới (< 5 tháng) có nguy cơ rời bỏ rất cao**  
    → Cần có **chiến lược giữ chân khách hàng** ngay từ giai đoạn đầu.  
